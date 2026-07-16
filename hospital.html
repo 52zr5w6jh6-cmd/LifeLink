@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LifeLink AI Hospital Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+
+    background:#eef5ff;
+
+    padding:40px;
+
+}
+
+.header{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    margin-bottom:30px;
+
+}
+
+.header h1{
+
+    font-size:36px;
+
+}
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:25px;
+
+}
+
+.card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.card h2{
+
+    margin-bottom:20px;
+
+    color:#2563eb;
+
+}
+
+.info{
+
+    margin:15px 0;
+
+    font-size:18px;
+
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:10px 18px;
+
+    border-radius:30px;
+
+    font-weight:700;
+
+    color:white;
+
+}
+
+.low{
+
+    background:#22c55e;
+
+}
+
+.medium{
+
+    background:#f59e0b;
+
+}
+
+.high{
+
+    background:#ef4444;
+
+}
+
+.aiBox{
+
+    background:#f8fbff;
+
+    border-left:5px solid #2563eb;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    line-height:1.8;
+
+}
+
+button{
+
+    margin-top:25px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:15px 25px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+button:hover{
+
+    opacity:.9;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>🏥 LifeLink AI Hospital Dashboard</h1>
+
+<p>Emergency Medical Information</p>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Patient Information</h2>
+
+<div class="info"><b>Name :</b> <span id="pName"></span></div>
+
+<div class="info"><b>Blood :</b> <span id="pBlood"></span></div>
+
+<div class="info"><b>Disease :</b> <span id="pDisease"></span></div>
+
+<div class="info"><b>Medication :</b> <span id="pMedicine"></span></div>
+
+<div class="info"><b>Allergy :</b> <span id="pAllergy"></span></div>
+
+<div class="info"><b>Emergency Contact :</b> <span id="pContact"></span></div>
+
+</div>
+
+<div class="card">
+
+<h2>AI Risk Analysis</h2>
+
+<div id="riskBox"></div>
+
+<button id="translateBtn">
+
+Translate to Local Language
+
+</button>
+
+</div>
+
+</div>
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+
+const profile = {
+
+    name: params.get("name"),
+    nationality: params.get("nationality"),
+    blood: params.get("blood"),
+    disease: params.get("disease"),
+    medicine: params.get("medicine"),
+    allergy: params.get("allergy"),
+    contact: params.get("contact"),
+    country: params.get("country")
+
+};
+
+if(profile){
+
+    document.getElementById("pName").textContent =
+        profile.name;
+
+    document.getElementById("pBlood").textContent =
+        profile.blood;
+
+    document.getElementById("pDisease").textContent =
+        profile.disease;
+
+    document.getElementById("pMedicine").textContent =
+        profile.medicine;
+
+    document.getElementById("pAllergy").textContent =
+        profile.allergy;
+
+    document.getElementById("pContact").textContent =
+        profile.contact;
+
+    let risk="Low";
+    let color="low";
+
+    if(
+        profile.disease.toLowerCase().includes("diabetes") ||
+        profile.allergy.trim()!=""
+    ){
+
+        risk="Medium";
+        color="medium";
+
+    }
+
+    if(
+        profile.disease.toLowerCase().includes("heart") ||
+        profile.disease.toLowerCase().includes("stroke")
+    ){
+
+        risk="High";
+        color="high";
+
+    }
+
+    document.getElementById("riskBox").innerHTML=`
+
+        <div class="badge ${color}">
+
+            ${risk} Risk
+
+        </div>
+
+        <br><br>
+
+        <div class="aiBox">
+
+        <b>AI Recommendation</b>
+
+        <br><br>
+
+        • Monitor patient's vital signs.
+
+        <br>
+
+        • Verify medication history.
+
+        <br>
+
+        • Consider allergy before treatment.
+
+        <br>
+
+        • Contact guardian if patient is unconscious.
+
+        </div>
+
+    `;
+
+}else{
+
+    document.getElementById("riskBox").innerHTML=`
+
+    <div class="badge high">
+
+    No Patient Data
+
+    </div>
+
+    <br><br>
+
+    Please return to the main page and create a profile.
+
+    `;
+
+}
+
+document.getElementById("translateBtn").onclick=function(){
+
+    alert(
+`Vietnamese Translation
+
+Tên bệnh nhân đã được AI dịch sang tiếng Việt.
+
+Đây là bản dịch minh họa dành cho bài thuyết trình.`
+    );
+
+};
+
+</script>
+
+</body>
+
+</html>
